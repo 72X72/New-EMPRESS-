@@ -1,0 +1,23 @@
+name: EMPRESS APK Builder
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout EMPRESS
+      uses: actions/checkout@v3
+
+    - name: Clone App Shell
+      run: git clone https://github.com/72X72/empress-app-shell.git
+
+    - name: Inject Throne Kernel
+      run: cp out/empress.jar empress-app-shell/app/libs/
+
+    - name: Build APK
+      run: |
+        cd empress-app-shell
+        ./gradlew assembleRelease
