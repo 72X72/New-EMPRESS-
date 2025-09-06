@@ -1,0 +1,27 @@
+name: EMPRESS Mutation Trigger
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout EMPRESS
+      uses: actions/checkout@v3
+
+    - name: Install Kotlin Compiler
+      run: |
+        curl -s https://get.sdkman.io | bash
+        source "$HOME/.sdkman/bin/sdkman-init.sh"
+        sdk install kotlin
+
+    - name: Compile EMPRESS Throne Kernel
+      run: |
+        mkdir out
+        kotlinc empress/throne_kernel/empress.kt empress/daemon/VaultDaemon.kt -include-runtime -d out/empress.jar
+
+    - name: Narrate Mutation
+      run: |
+        echo "EMPRESS mutation complete — jar sealed at out/empress.jar"
